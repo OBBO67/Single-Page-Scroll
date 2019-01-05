@@ -1,0 +1,37 @@
+body {
+  margin: 0;
+  overflow: hidden;
+}
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  /* transform: translate3d(0, 0, 0); */
+}
+
+.page {
+  min-height: 100vh;
+  min-width: 100vw;
+  margin: 0;
+  padding: 0;
+  justify-content: center;
+  align-items: center;
+}
+
+.page:nth-child(1) {
+  background: lightgreen;
+}
+
+.page:nth-child(2) {
+  background: lightseagreen;
+}
+
+.page:nth-child(3) {
+  background: lightcoral;
+}
+
+.page:nth-child(4) {
+  background: skyblue;
+}
