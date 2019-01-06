@@ -1,3 +1,7 @@
+// scroll type constants
+const SCROLL_DOWN = "scroll_down";
+const SCROLL_UP = "scroll_up";
+
 // debounce function to stop events from firing too much
 // Taken from: https://davidwalsh.name/javascript-debounce-function
 function debounce(func, wait = 20, immediate = true) {
@@ -22,12 +26,10 @@ function debounce(func, wait = 20, immediate = true) {
   };
 }
 
-// scrollDown function to move down the window by the height of the page div
-function scrollKeyPress(event, pageContainer) {
-  console.log(event);
+// function to handle the scrolling down or up
+function scrollHandler(scrollType) {
   let translation = 0;
-  // if arrow down, go down page, else go up if arrow up
-  if (event.keyCode == "40") {
+  if (scrollType == SCROLL_DOWN) {
     // moving down to next page
     ++currPage;
     translation = (100 / pages.length) * (currPage - 1);
@@ -38,7 +40,7 @@ function scrollKeyPress(event, pageContainer) {
       return;
     }
     pageContainer.style.transform = `translate3d(0, ${-translation}%, 0)`;
-  } else if (event.keyCode == "38") {
+  } else if (scrollType == SCROLL_UP) {
     // moving up to next page
     --currPage;
     translation = (100 / pages.length) * (currPage - 1);
@@ -52,30 +54,26 @@ function scrollKeyPress(event, pageContainer) {
   }
 }
 
+// scrollDown function to move down the window by the height of the page div
+function scrollKeyPress(event, pageContainer) {
+  console.log(event);
+  // if arrow down, go down page, else go up if arrow up
+  if (event.keyCode == "40") {
+    // scroll down to next page
+    scrollHandler(SCROLL_DOWN);
+  } else if (event.keyCode == "38") {
+    // scroll up to next page
+    scrollHandler(SCROLL_UP);
+  }
+}
+
 function handleScrollEvent(delta) {
-  let translation = 0;
   if (delta > 0) {
-    // moving up to next page
-    --currPage;
-    translation = (100 / pages.length) * (currPage - 1);
-    console.log(translation);
-    if (translation < 0) {
-      // never actually moved a page if in here
-      ++currPage;
-      return;
-    }
-    pageContainer.style.transform = `translate3d(0, ${-translation}%, 0)`;
+    // scroll up to next page
+    scrollHandler(SCROLL_UP);
   } else if (delta < 0) {
-    // moving down to next page
-    ++currPage;
-    translation = (100 / pages.length) * (currPage - 1);
-    console.log(translation);
-    if (translation >= 100) {
-      // never actually moved a page if in here
-      --currPage;
-      return;
-    }
-    pageContainer.style.transform = `translate3d(0, ${-translation}%, 0)`;
+    // scroll down to next page
+    scrollHandler(SCROLL_DOWN);
   }
 }
 
