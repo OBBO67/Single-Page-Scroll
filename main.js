@@ -3,9 +3,9 @@ const SCROLL_DOWN = "scroll_down";
 const SCROLL_UP = "scroll_up";
 
 // get all page divs
-const pages = document.querySelectorAll(".page");
-// main page container that will translated
-const pageContainer = document.querySelector(".page-container");
+// const pages = document.querySelectorAll(".page");
+// // main page container that will translated
+// const pageContainer = document.querySelector(".page-container");
 
 class FullPage {
   /**
@@ -135,6 +135,8 @@ class FullPage {
   }
 }
 
-let fullPage = new FullPage(4);
-fullPage.createEventListener(pageContainer, "keydown");
-fullPage.createEventListener(pageContainer, "mousewheel");
+// const fullPage = new FullPage(4);
+// fullPage.createEventListener(pageContainer, "keydown");
+// fullPage.createEventListener(pageContainer, "mousewheel");
+
+export default FullPage;
