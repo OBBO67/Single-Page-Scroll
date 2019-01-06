@@ -1,6 +1,6 @@
 // debounce function to stop events from firing too much
 // Taken from: https://davidwalsh.name/javascript-debounce-function
-function debounce(func, wait = 40, immediate = true) {
+function debounce(func, wait = 20, immediate = true) {
   var timeout;
   return function() {
     var context = this,
@@ -107,9 +107,7 @@ window.addEventListener("keydown", event => {
 /* Scroll Events */
 
 // IE9, Chrome, Safari, Opera
-window.addEventListener("mousewheel", debounce(mouseWheelHandler), {
-  once: true
-});
+window.addEventListener("mousewheel", debounce(mouseWheelHandler), false);
 // Firefox
 window.addEventListener("DOMMouseScroll", debounce(mouseWheelHandler), false);
 // IE 6/7/8
