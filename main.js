@@ -4,7 +4,7 @@ const SCROLL_UP = "scroll_up";
 
 // debounce function to stop events from firing too much
 // Taken from: https://davidwalsh.name/javascript-debounce-function
-function debounce(func, wait = 20, immediate = true) {
+function debounce(func, wait = 40, immediate = true) {
   var timeout;
   return function() {
     var context = this,
@@ -26,6 +26,38 @@ function debounce(func, wait = 20, immediate = true) {
   };
 }
 
+// throttle function to limit calls to scroll event
+// taken from: https://codeburst.io/throttling-and-debouncing-in-javascript-b01cad5c8edf
+function throttle(func, limit = 1000) {
+  let inThrottle;
+  return function() {
+    const args = arguments;
+    const context = this;
+    if (!inThrottle) {
+      func.apply(context, args);
+      inThrottle = true;
+      setTimeout(() => (inThrottle = false), limit);
+    }
+  };
+}
+
+// animation easing function
+function easeInQuart(t, b, c, d) {
+  t /= d;
+  return c * t * t * t * t + b;
+}
+
+// animation handler
+function animationHandler(currentTime) {
+  if (startTime === null) {
+    startTime = currentTime;
+  }
+  let timePassed = currentTime - startTime;
+  let animate = easeInQuart(timePassed);
+
+  requestAnimationFrame(animationHandler);
+}
+
 // function to handle the scrolling down or up
 function scrollHandler(scrollType) {
   let translation = 0;
@@ -39,6 +71,7 @@ function scrollHandler(scrollType) {
       --currPage;
       return;
     }
+    pageContainer.style.transition = `transform 300ms 100ms cubic-bezier(0.175, 0.885, 0.32, 0.5)`;
     pageContainer.style.transform = `translate3d(0, ${-translation}%, 0)`;
   } else if (scrollType == SCROLL_UP) {
     // moving up to next page
@@ -50,12 +83,13 @@ function scrollHandler(scrollType) {
       ++currPage;
       return;
     }
+    pageContainer.style.transition = `transform 300ms 100ms cubic-bezier(0.175, 0.885, 0.32, 0.5)`;
     pageContainer.style.transform = `translate3d(0, ${-translation}%, 0)`;
   }
 }
 
 // scrollDown function to move down the window by the height of the page div
-function scrollKeyPress(event, pageContainer) {
+function scrollKeyPress() {
   console.log(event);
   // if arrow down, go down page, else go up if arrow up
   if (event.keyCode == "40") {
@@ -98,15 +132,13 @@ const pageContainer = document.querySelector(".page-container");
 var currPage = 1;
 
 // add keydown event to window to scroll down by the height of the page div
-window.addEventListener("keydown", event => {
-  scrollKeyPress(event, pageContainer);
-});
+window.addEventListener("keydown", throttle(scrollKeyPress), false);
 
 /* Scroll Events */
 
 // IE9, Chrome, Safari, Opera
-window.addEventListener("mousewheel", debounce(mouseWheelHandler), false);
+window.addEventListener("mousewheel", throttle(mouseWheelHandler), false);
 // Firefox
-window.addEventListener("DOMMouseScroll", debounce(mouseWheelHandler), false);
+window.addEventListener("DOMMouseScroll", throttle(mouseWheelHandler), false);
 // IE 6/7/8
 // window.attachEvent("onmousewheel", mouseWheelHandler);
